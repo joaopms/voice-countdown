@@ -46,6 +46,25 @@ function staticMode() {
           }
         }],
   function (err, results) {
-    console.log(results);
+    var total = results.total;
+    var between = results.between;
+    var left = total;
+
+    console.log("Countdown started.");
+    function tick() {
+      if (left <= 0) {
+        clearInterval(interval);
+        // voice thingy - end
+        console.log("Countdown ended.");
+        return;
+      }
+
+      // voice thingy - tick
+      console.log(left + " minute(s) left!");
+      left -= between;
+    }
+
+    tick();
+    var interval = setInterval(tick, between * /*60000*/ 1000);
   });
 }
