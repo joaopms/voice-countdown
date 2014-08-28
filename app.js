@@ -42,7 +42,6 @@ function staticMode() {
           required: true,
           conform: function(between) {
             var total = prompt.history("total").value;
-            console.log(total % between == 0);
             return between < total && total % between == 0;
           }
         }],
