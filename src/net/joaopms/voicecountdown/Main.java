@@ -7,21 +7,24 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println(promptUser("This is a test."));
+        // TODO Add an option to switch between static and dynamic mode
+        staticMode();
     }
 
-    public static String promptUser(String question) {
-        System.out.print(question + " ");
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextLine();
+    private static void staticMode() {
+        Prompt timeToCount = new Prompt();
+        timeToCount.setQuestion("Hello? Is this working?");
+        timeToCount.setErrorMessage("This should be an error message.");
+        timeToCount.addValidResponse("0");
+        timeToCount.addValidResponse("1");
+        System.out.println(timeToCount.prompt());
     }
 
     // TODO Finish this and remove the exceptions from the method signature
-    public static void playAlert() throws JavaLayerException, FileNotFoundException {
+    private static void playAlert() throws JavaLayerException, FileNotFoundException {
         File file = new File("D:\\Downloads\\translate_tts.mp3");
         FileInputStream fileInputStream = new FileInputStream(file);
         BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
