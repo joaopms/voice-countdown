@@ -15,12 +15,7 @@ public class Main {
     }
 
     private static void staticMode() {
-        Prompt timeToCount = new Prompt();
-        timeToCount.setQuestion("Hello? Is this working?");
-        timeToCount.setErrorMessage("This should be an error message.");
-        timeToCount.addValidResponse("0");
-        timeToCount.addValidResponse("1");
-        System.out.println(timeToCount.prompt());
+        
     }
 
     // TODO Finish this and remove the exceptions from the method signature
