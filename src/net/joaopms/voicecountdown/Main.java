@@ -11,11 +11,7 @@ import java.io.FileNotFoundException;
 public class Main {
     public static void main(String[] args) {
         // TODO Add an option to switch between static and dynamic mode
-        staticMode();
-    }
-
-    private static void staticMode() {
-        
+        new StaticMode();
     }
 
     // TODO Finish this and remove the exceptions from the method signature
