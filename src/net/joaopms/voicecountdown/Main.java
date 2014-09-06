@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 public class Main {
     public static void main(String[] args) {
         // TODO Add an option to switch between static and dynamic mode
+        System.out.println("VoiceCountdown started!");
         new StaticMode();
     }
 

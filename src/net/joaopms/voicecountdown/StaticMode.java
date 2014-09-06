@@ -10,6 +10,7 @@ public class StaticMode {
     public StaticMode() {
         this.promptTotalTime();
         this.promptBetweenTime();
+        this.promptStart();
     }
 
     private void promptTotalTime() {
@@ -66,6 +67,17 @@ public class StaticMode {
         }
 
         this.betweenTime = response;
+    }
+
+    private void promptStart() {
+        System.out.print("Press ENTER when you are ready to start. ");
+        Scanner scanner = new Scanner(System.in);
+        if (scanner.hasNextLine())
+            startLoop();
+    }
+
+    private void startLoop() {
+        
     }
 
     private void throwError(String message) {
