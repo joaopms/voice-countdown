@@ -1,8 +1,8 @@
 package net.joaopms.voicecountdown;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import javazoom.jl.player.Player;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -89,16 +89,16 @@ public class Main {
 
         System.out.println("Countdown started");
         while (true) {
-            playAlert(timeLeft + (timeLeft == 1 ? " minute " : " minutes ") + "left", false);
-            timeLeft -= betweenTime;
-
             if (timeLeft == 0) {
                 playAlert("Countdown finished", true);
                 break;
             }
 
+            playAlert(timeLeft + (timeLeft == 1 ? " minute " : " minutes ") + "left", false);
+            timeLeft -= betweenTime;
+
             try {
-                Thread.sleep(betweenTime * /*60000*/ 1000);
+                Thread.sleep(betweenTime * 60000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -139,6 +139,11 @@ public class Main {
 
                     inputStream.close();
                     fileOutputStream.close();
+
+                    File file = new File(filePath);
+                    FileInputStream fileInputStream = new FileInputStream(file);
+                    BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+                    new Player(bufferedInputStream).play();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -157,9 +162,5 @@ public class Main {
                 }
             }
         }).start();
-        /*File file = new File("D:\\Downloads\\translate_tts.mp3");
-        FileInputStream fileInputStream = new FileInputStream(file);
-        BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
-        new Player(bufferedInputStream).play();*/
     }
 }
