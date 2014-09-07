@@ -1,12 +1,5 @@
 package net.joaopms.voicecountdown;
 
-import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.player.Player;
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -85,10 +78,23 @@ public class Main {
     }
 
     private static void startLoop() {
-        boolean shouldRun = true;
+        int timeLeft = totalTime;
 
-        while (shouldRun) {
+        System.out.println("Countdown started");
+        while (true) {
+            playAlert(timeLeft + (timeLeft == 1 ? " minute " : " minutes ") + "left");
+            timeLeft -= betweenTime;
 
+            if (timeLeft == 0) {
+                playAlert("Countdown finished");
+                break;
+            }
+
+            try {
+                Thread.sleep(betweenTime * /*60000*/ 1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -103,10 +109,11 @@ public class Main {
     }
 
     // TODO Finish this and remove the exceptions from the method signature
-    private static void playAlert() throws JavaLayerException, FileNotFoundException {
-        File file = new File("D:\\Downloads\\translate_tts.mp3");
+    private static void playAlert(String message) {
+        System.out.println(message);
+        /*File file = new File("D:\\Downloads\\translate_tts.mp3");
         FileInputStream fileInputStream = new FileInputStream(file);
         BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
-        new Player(bufferedInputStream).play();
+        new Player(bufferedInputStream).play();*/
     }
 }
