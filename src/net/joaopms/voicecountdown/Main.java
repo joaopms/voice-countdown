@@ -1,9 +1,16 @@
 package net.joaopms.voicecountdown;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
+    private static File audioFiles = new File("audioFiles");
     private static int totalTime = 0;
     private static int betweenTime = 0;
 
@@ -82,11 +89,11 @@ public class Main {
 
         System.out.println("Countdown started");
         while (true) {
-            playAlert(timeLeft + (timeLeft == 1 ? " minute " : " minutes ") + "left");
+            playAlert(timeLeft + (timeLeft == 1 ? " minute " : " minutes ") + "left", false);
             timeLeft -= betweenTime;
 
             if (timeLeft == 0) {
-                playAlert("Countdown finished");
+                playAlert("Countdown finished", true);
                 break;
             }
 
@@ -109,8 +116,47 @@ public class Main {
     }
 
     // TODO Finish this and remove the exceptions from the method signature
-    private static void playAlert(String message) {
-        System.out.println(message);
+    private static void playAlert(final String message, final boolean deleteDirectory) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(message);
+
+                try {
+                    audioFiles.mkdir();
+                    String encodedMessage = URLEncoder.encode(message, "UTF-8");
+                    URL url = new URL("http://translate.google.com/translate_tts?tl=en&q=" + encodedMessage);
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0");
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    String filePath = audioFiles.getPath() + File.separator + encodedMessage + ".mp3";
+                    FileOutputStream fileOutputStream = new FileOutputStream(filePath);
+
+                    int byteToWrite = 0;
+                    while ((byteToWrite = inputStream.read()) != -1) {
+                        fileOutputStream.write(byteToWrite);
+                    }
+
+                    inputStream.close();
+                    fileOutputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if (deleteDirectory) {
+                    String filePath = audioFiles.getPath() + File.separator;
+                    String[] folderList = audioFiles.list();
+                    int folderSize = folderList.length - 1;
+
+                    for (int i = folderSize; i >= 0; i--) {
+                        File temporaryFile = new File(filePath + folderList[i]);
+                        temporaryFile.delete();
+                    }
+
+                    audioFiles.delete();
+                }
+            }
+        }).start();
         /*File file = new File("D:\\Downloads\\translate_tts.mp3");
         FileInputStream fileInputStream = new FileInputStream(file);
         BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
